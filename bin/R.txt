@@ -442,6 +442,8 @@ int string abc_shareactionprovider_share_with_application 0x7f0b000e
 int string abc_toolbar_collapse_description 0x7f0b0004
 int string app_name 0x7f0b0010
 int string hello_world 0x7f0b0011
+int string pref_shake_enabled 0x7f0b0016
+int string pref_shake_summary 0x7f0b0017
 int string pref_themes 0x7f0b0014
 int string pref_touch_enabled 0x7f0b0013
 int string pref_touch_summary 0x7f0b0015

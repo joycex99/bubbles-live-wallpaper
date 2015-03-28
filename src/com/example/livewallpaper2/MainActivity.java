@@ -20,4 +20,9 @@ public class MainActivity extends Activity {
 		intent.putExtra(WallpaperManager.EXTRA_LIVE_WALLPAPER_COMPONENT, new ComponentName(this, LiveWallpaperService.class));
 		startActivity(intent);
 	}
+	
+	public void openSettings(View view) {
+		Intent intent = new Intent(this, SettingsActivity.class);
+		startActivity(intent);
+	}
 }
