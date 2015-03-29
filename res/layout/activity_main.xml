@@ -1,19 +1,42 @@
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="${relativePackage}.${activityClass}" >
-
-    <Button
+    tools:context="${relativePackage}.${activityClass}" 
+    android:background="@drawable/app_background" >
+ 
+    <RelativeLayout 
+        android:orientation="vertical"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Touch to set wallpaper"
-        android:onClick="setWallpaper" />
-    
-    <Button
-         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Settings"
-        android:onClick="openSettings" />
-
-</LinearLayout>
+        android:layout_height="wrap_content" 
+        android:layout_marginTop="100dp"
+        android:layout_marginLeft="60dp" 
+        android:layout_marginStart="60dp" 
+        android:paddingLeft="20dp"
+        android:paddingRight="20dp"
+        android:layout_centerInParent="true">
+        
+	    <Button
+	        android:id="@+id/setWallpaper"
+	        android:layout_width="200dp"
+	        android:layout_height="wrap_content"
+	        android:text="Set wallpaper"
+	        android:textSize="20sp"
+	        android:layout_centerHorizontal="true"
+	        android:layout_marginBottom="20dp"
+	        android:background="@drawable/custom_button"
+	        android:onClick="setWallpaper" />
+	    
+	    <Button
+	        android:id="@+id/settings"
+	        android:layout_width="200dp"
+	        android:layout_height="wrap_content"
+	        android:text="Settings"
+	        android:textSize="20sp"
+	        android:layout_centerHorizontal = "true"
+	        android:layout_below="@id/setWallpaper"
+	        android:background="@drawable/custom_button"
+	        android:onClick="openSettings" />
+        
+    </RelativeLayout>
+</RelativeLayout>

@@ -3,7 +3,6 @@ package com.example.livewallpaper2;
 import java.util.ArrayList;
 import java.util.Random;
 
-import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
@@ -29,26 +28,25 @@ import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.WindowManager;
 
-@SuppressLint("NewApi")
 public class LiveWallpaperService extends WallpaperService {
 
 	@Override
 	public Engine onCreateEngine() {
-		return new WallpaperEngine(this);
+		return new WallpaperEngine();
 	}
 	
 	private class WallpaperEngine extends Engine implements SensorEventListener, OnSharedPreferenceChangeListener {
-		private final Context context;
+		//private final Context context;
 		
 		private boolean visible = false;
 		private final Handler handler = new Handler();
 		private int sw, sh;
-		Random rand = new Random();
+		Random rand = new Random(); 
 		ArrayList<Circle> circles;
 		ArrayList<Circle> popped;
 		
 		private final int RANDOM = 0;
-		private final int BOTTOM = 1;
+		private final int BOTTOM = 1; 
 		private final int BELOW = 2;
 		
 		private Vibrator v;
@@ -66,7 +64,9 @@ public class LiveWallpaperService extends WallpaperService {
 		
 		//THEME COLOR SETS
 		private final int[] theme1Colors = {0xff7DF0AC, 0xff7DDAF0, 0xffC993F5, 0xff010B91, Color.BLACK}; //left, center, right, backgroundColor1, backgroundColor2
-		private final int[] theme2Colors = {0xffD9D9D9, 0xffE8E1AC, 0xffE8D25A, Color.BLACK, Color.BLACK};
+		private final int[] theme2Colors = {0xffD6D6D6, 0xffF0E48D, 0xffFFDF12, 0xff2A0266, Color.BLACK};
+		private final int[] theme3Colors = {0xffDBDBDB, 0xffDE2A2A, 0xff7A002B, 0xff2B000D, Color.BLACK};
+		private final int[] theme4Colors = {0xff87EDAD, 0xff72F7E6, 0xff82B4FA, 0xff97A4C9, 0xff3F4159};
 		private final int[] uhoh = {Color.BLACK};
 		
 		//TEST
@@ -78,9 +78,7 @@ public class LiveWallpaperService extends WallpaperService {
 			}
 		};
 		
-		public WallpaperEngine(Context c) {
-			this.context = c;
-		}
+		public WallpaperEngine() { }
 		
 		@Override
 		public void onCreate(SurfaceHolder surfaceHolder) {
@@ -91,12 +89,12 @@ public class LiveWallpaperService extends WallpaperService {
 			sensorManager.registerListener(this, accelerometer, SensorManager.SENSOR_DELAY_NORMAL);
 			changeThreshold = (float) (accelerometer.getMaximumRange()/1.5);
 			
-			prefs = PreferenceManager.getDefaultSharedPreferences(context);
+			prefs = PreferenceManager.getDefaultSharedPreferences(LiveWallpaperService.this);
 			prefs.registerOnSharedPreferenceChangeListener(this);
 			touchEnabled = prefs.getBoolean("touch", true);
 			theme = prefs.getString("themes", "default string");
 		    
-			v = (Vibrator) context.getSystemService(Context.VIBRATOR_SERVICE);
+			v = (Vibrator) LiveWallpaperService.this.getSystemService(Context.VIBRATOR_SERVICE);
 			
 			Display display = ((WindowManager) getSystemService(Context.WINDOW_SERVICE)).getDefaultDisplay(); 
 			Point size = new Point();
@@ -105,19 +103,21 @@ public class LiveWallpaperService extends WallpaperService {
 				sw = size.x;
 				sh = size.y;
 			} else {
-			display.getSize(size); 
+				display.getSize(size);  
 				sw = size.x;
 				sh = size.y;
 			}
 			
+			//1080 X 1920
+			
 			circles = new ArrayList<>();
-			for (int i = 0; i < 20; i++) {
+			for (int i = 0; i < 18; i++) {
 				circles.add(generateCircle(RANDOM));
 			}
 			
 			while (!evenlyDistributed(circles)) {
 				circles = new ArrayList<>();
-				for (int i = 0; i < 20; i++) {
+				for (int i = 0; i < 18; i++) {
 					circles.add(generateCircle(RANDOM));
 				}
 			}
@@ -141,19 +141,24 @@ public class LiveWallpaperService extends WallpaperService {
 				else if (circ.getX() > 2*sw/3)
 					right++;
 			}
-			if (backgroundCount <= 7 || backgroundCount >= 13) 
+			if (backgroundCount <= 6 || backgroundCount >= 12) 
 				return false;
-			if (left <= 5 || left >= 9 || center <= 5 || center >= 9 || right <= 5 || right >= 9)
+			if (left <= 4 || left >= 8 || center <= 4 || center >= 8 || right <= 4 || right >= 8)
 				return false;
 			return true;
 		}
 		
 		public Circle generateCircle(int type) {
-			//int x = idealPos()[0];
-			//int y = idealPos()[1];
+			
+			/** FOR SCREEN SIZE SCALING **/
+			int radVar = (int)(0.1*sw);
+			int radBase = (int)(0.055*sw);
+			int velVar = (int)(0.0045*sw);
+			int velBase = (int)(0.003*sw);
+			
 			int x = rand.nextInt(sw);
 			int y = rand.nextInt(sh);
-			int r = rand.nextInt(100)+60;
+			int r = rand.nextInt(radVar)+radBase;
 			int color; 
 			
 			/**THEME 1: DEFAULT**/
@@ -178,12 +183,34 @@ public class LiveWallpaperService extends WallpaperService {
 				}
 			}
 			
+			/**THEME 3: RUBY **/
+			else if (theme.equals("3")) {
+				if (x < sw/3) {
+					color = theme3Colors[0];
+				} else if (x < 2*sw/3) {
+					color = theme3Colors[1];
+				} else {
+					color = theme3Colors[2];
+				}
+			}
+			
+			/**THEME 4: LIGHT **/
+			else if (theme.equals("4")) {
+				if (x < sw/3) {
+					color = theme4Colors[0];
+				} else if (x < 2*sw/3) {
+					color = theme4Colors[1];
+				} else {
+					color = theme4Colors[2];
+				}
+			}
+			
 			/**SHOULD NEVER HAPPEN*/
 			else {
 				color = uhoh[0];
 			}
 			
-			int velocity = rand.nextInt(4)+3;
+			int velocity = rand.nextInt(velVar)+velBase;
 			boolean background = rand.nextInt(2)==0 ? true : false;
 			int alpha;
 			if (background) 
@@ -218,8 +245,18 @@ public class LiveWallpaperService extends WallpaperService {
 					} else if (theme.equals("2")) {
 						backgroundColor1 = theme2Colors[3];
 						backgroundColor2 = theme2Colors[4];
-						paint.setShader(new LinearGradient(0, 2*sh/3, sw, sh/3, backgroundColor1, backgroundColor2, Shader.TileMode.CLAMP));
-					} else { //SHOULD NEVER HAPPEN
+						paint.setShader(new LinearGradient(0, 0, sw, 2*sh/3, backgroundColor1, backgroundColor2, Shader.TileMode.CLAMP));
+					} else if (theme.equals("3")) {
+						backgroundColor1 = theme3Colors[3];
+						backgroundColor2 = theme3Colors[4];
+						paint.setShader(new LinearGradient(0, sh, 3*sw/4, sh/2, backgroundColor1, backgroundColor2, Shader.TileMode.CLAMP));
+					} else if (theme.equals("4")) {
+						backgroundColor1 = theme4Colors[3];
+						backgroundColor2 = theme4Colors[4];
+						paint.setShader(new RadialGradient(sw/2, sh/2, sh/2, backgroundColor1, backgroundColor2, Shader.TileMode.CLAMP));
+					}
+					
+					else { //SHOULD NEVER HAPPEN
 						backgroundColor1 = Color.WHITE;
 						backgroundColor2 = Color.WHITE;
 					}
@@ -238,18 +275,18 @@ public class LiveWallpaperService extends WallpaperService {
 						
 						//is foreground bubble
 						if (!circle.isBackground()) {
-							c.drawCircle(circle.getX(), circle.getY(), circle.getR()+4, p);
+							c.drawCircle(circle.getX(), circle.getY(), circle.getR()+(int)(0.0037*sw), p);
 							
 							//outer edge
 							p.setStyle(Paint.Style.STROKE);
 							p.setColor(0xccffffff);
-							p.setStrokeWidth(8);
+							p.setStrokeWidth((int)(0.0074*sw));
 							c.drawCircle(circle.getX(), circle.getY(), circle.getR(), p);
 				
 						} 
 						//is background bubble
 						else {
-							p.setMaskFilter(new BlurMaskFilter(rand.nextInt(4)+9, BlurMaskFilter.Blur.NORMAL));
+							p.setMaskFilter(new BlurMaskFilter(rand.nextInt((int)(0.0037*sw))+(int)(0.0083*sw), BlurMaskFilter.Blur.NORMAL)); 
 							c.drawCircle(circle.getX(), circle.getY(), circle.getR(), p);
 						}
 						
@@ -339,12 +376,18 @@ public class LiveWallpaperService extends WallpaperService {
 		
 		
 		public ArrayList<int[]> generateSparks(Circle circle) {
+			
+			/**FOR SCREEN SIZE SCALING**/
+			int scaledRad = (int)(0.004*sw);
+			int scaledVelVar = (int)(0.0055*sw);
+			int scaledVelBase = (int)(0.0028*sw);
+			
 			ArrayList<int[]> sparks = new ArrayList<int[]>();
 			for (int i = 0; i < rand.nextInt(3)+circle.getR()/10; i++) {
 				int cx = circle.getX()-circle.getR()+rand.nextInt(2*circle.getR()); //anywhere horizontally within circle range
 				int cy = circle.getY()-circle.getR()+rand.nextInt(2*circle.getR()); //anywhere vertically within circle range
-				int cr = rand.nextInt(4)+4;
-				int cvy = rand.nextInt(6)+3;
+				int cr = rand.nextInt(scaledRad)+scaledRad;
+				int cvy = rand.nextInt(scaledVelVar)+scaledVelBase;
 				int[] spark = {cx, cy, cr, cvy};
 				sparks.add(spark);
 			}
@@ -491,6 +534,10 @@ public class LiveWallpaperService extends WallpaperService {
 				return theme1Colors;
 			case "2":
 				return theme2Colors;
+			case "3":
+				return theme3Colors;
+			case "4":
+				return theme4Colors;
 			default:
 				return new int[3];
 			}

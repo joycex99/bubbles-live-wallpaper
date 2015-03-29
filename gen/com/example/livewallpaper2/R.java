@@ -1627,8 +1627,11 @@ containing a value of this type.
         public static final int abc_textfield_search_activated_mtrl_alpha=0x7f020030;
         public static final int abc_textfield_search_default_mtrl_alpha=0x7f020031;
         public static final int abc_textfield_search_material=0x7f020032;
-        public static final int ic_launcher=0x7f020033;
-        public static final int thumbnail=0x7f020034;
+        public static final int app_background=0x7f020033;
+        public static final int custom_button=0x7f020034;
+        public static final int graybox=0x7f020035;
+        public static final int ic_launcher=0x7f020036;
+        public static final int thumbnail=0x7f020037;
     }
     public static final class id {
         public static final int action_bar=0x7f0a0031;
@@ -1682,6 +1685,8 @@ containing a value of this type.
         public static final int search_plate=0x7f0a0039;
         public static final int search_src_text=0x7f0a003a;
         public static final int search_voice_btn=0x7f0a003e;
+        public static final int setWallpaper=0x7f0a003f;
+        public static final int settings=0x7f0a0040;
         public static final int shortcut=0x7f0a002a;
         public static final int showCustom=0x7f0a0010;
         public static final int showHome=0x7f0a0011;

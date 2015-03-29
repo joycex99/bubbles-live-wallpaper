@@ -333,8 +333,11 @@ int drawable abc_textfield_default_mtrl_alpha 0x7f02002f
 int drawable abc_textfield_search_activated_mtrl_alpha 0x7f020030
 int drawable abc_textfield_search_default_mtrl_alpha 0x7f020031
 int drawable abc_textfield_search_material 0x7f020032
-int drawable ic_launcher 0x7f020033
-int drawable thumbnail 0x7f020034
+int drawable app_background 0x7f020033
+int drawable custom_button 0x7f020034
+int drawable graybox 0x7f020035
+int drawable ic_launcher 0x7f020036
+int drawable thumbnail 0x7f020037
 int id action_bar 0x7f0a0031
 int id action_bar_activity_content 0x7f0a0003
 int id action_bar_container 0x7f0a0030
@@ -386,6 +389,8 @@ int id search_mag_icon 0x7f0a0038
 int id search_plate 0x7f0a0039
 int id search_src_text 0x7f0a003a
 int id search_voice_btn 0x7f0a003e
+int id setWallpaper 0x7f0a003f
+int id settings 0x7f0a0040
 int id shortcut 0x7f0a002a
 int id showCustom 0x7f0a0010
 int id showHome 0x7f0a0011
