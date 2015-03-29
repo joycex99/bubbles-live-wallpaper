@@ -1,19 +1,17 @@
 package com.example.livewallpaper2;
 
 import java.util.ArrayList;
-import java.util.Random;
 
 public class Circle {
-	private int x, y, r, color, alpha, velocity;
+	private float x, y, r, velocity;
+	private int color, alpha;
 	private boolean background;
 	private boolean toBePopped;
-	public ArrayList<int[]> sparks; //[cx, cy, r, vy]
+	public ArrayList<float[]> sparks; //[cx, cy, r, vy]
 	private boolean hasSparks;
 	private int popCount;
 	
-	private Random rand = new Random();
-	
-	public Circle(int x, int y, int r, int c, int a, int v, boolean b) {
+	public Circle(float x, float y, float r, int c, int a, float v, boolean b) {
 		this.x = x;
 		this.y = y;
 		this.r = r;
@@ -27,27 +25,27 @@ public class Circle {
 		this.popCount = 255;
 	}
 
-	public int getX() {
+	public float getX() {
 		return x;
 	}
 
-	public void setX(int x) {
+	public void setX(float x) {
 		this.x = x;
 	}
 
-	public int getY() {
+	public float getY() {
 		return y;
 	}
 
-	public void setY(int y) {
+	public void setY(float y) {
 		this.y = y;
 	}
 
-	public int getR() {
+	public float getR() {
 		return r;
 	}
 
-	public void setR(int r) {
+	public void setR(float r) {
 		this.r = r;
 	}
 
@@ -67,11 +65,11 @@ public class Circle {
 		this.alpha = alpha;
 	}
 
-	public int getVelocity() {
+	public float getVelocity() {
 		return velocity;
 	}
 
-	public void setVelocity(int velocity) {
+	public void setVelocity(float velocity) {
 		this.velocity = velocity;
 	}
 

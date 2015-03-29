@@ -1627,11 +1627,17 @@ containing a value of this type.
         public static final int abc_textfield_search_activated_mtrl_alpha=0x7f020030;
         public static final int abc_textfield_search_default_mtrl_alpha=0x7f020031;
         public static final int abc_textfield_search_material=0x7f020032;
-        public static final int app_background=0x7f020033;
-        public static final int custom_button=0x7f020034;
-        public static final int graybox=0x7f020035;
-        public static final int ic_launcher=0x7f020036;
-        public static final int thumbnail=0x7f020037;
+        public static final int background_theme_1=0x7f020033;
+        public static final int background_theme_2=0x7f020034;
+        public static final int background_theme_3=0x7f020035;
+        public static final int background_theme_4=0x7f020036;
+        public static final int background_theme_5=0x7f020037;
+        public static final int background_theme_6=0x7f020038;
+        public static final int background_theme_7=0x7f020039;
+        public static final int custom_button=0x7f02003a;
+        public static final int graybox=0x7f02003b;
+        public static final int ic_launcher=0x7f02003c;
+        public static final int thumbnail=0x7f02003d;
     }
     public static final class id {
         public static final int action_bar=0x7f0a0031;
@@ -1649,6 +1655,7 @@ containing a value of this type.
         public static final int action_mode_close_button=0x7f0a0020;
         public static final int activity_chooser_view_content=0x7f0a0021;
         public static final int always=0x7f0a0014;
+        public static final int app_background=0x7f0a003f;
         public static final int beginning=0x7f0a001b;
         public static final int checkbox=0x7f0a0029;
         public static final int collapseActionView=0x7f0a0015;
@@ -1685,8 +1692,8 @@ containing a value of this type.
         public static final int search_plate=0x7f0a0039;
         public static final int search_src_text=0x7f0a003a;
         public static final int search_voice_btn=0x7f0a003e;
-        public static final int setWallpaper=0x7f0a003f;
-        public static final int settings=0x7f0a0040;
+        public static final int setWallpaper=0x7f0a0040;
+        public static final int settings=0x7f0a0041;
         public static final int shortcut=0x7f0a002a;
         public static final int showCustom=0x7f0a0010;
         public static final int showHome=0x7f0a0011;

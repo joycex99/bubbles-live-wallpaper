@@ -40,7 +40,7 @@ public class LiveWallpaperService extends WallpaperService {
 		
 		private boolean visible = false;
 		private final Handler handler = new Handler();
-		private int sw, sh;
+		private int sw, sh, sf; //width, height, scaleFactor
 		Random rand = new Random(); 
 		ArrayList<Circle> circles;
 		ArrayList<Circle> popped;
@@ -65,11 +65,13 @@ public class LiveWallpaperService extends WallpaperService {
 		//THEME COLOR SETS
 		private final int[] theme1Colors = {0xff7DF0AC, 0xff7DDAF0, 0xffC993F5, 0xff010B91, Color.BLACK}; //left, center, right, backgroundColor1, backgroundColor2
 		private final int[] theme2Colors = {0xffD6D6D6, 0xffF0E48D, 0xffFFDF12, 0xff2A0266, Color.BLACK};
-		private final int[] theme3Colors = {0xffDBDBDB, 0xffDE2A2A, 0xff7A002B, 0xff2B000D, Color.BLACK};
+		private final int[] theme3Colors = {0xffDBDBDB, 0xffDE2A2A, 0xff7A002B, 0xff30000F, Color.BLACK};
 		private final int[] theme4Colors = {0xff87EDAD, 0xff72F7E6, 0xff82B4FA, 0xff97A4C9, 0xff3F4159};
+		private final int[] theme5Colors = {0xffEC3F8C, 0xff39B1C6, 0xff1FD26A, 0xff32313B};
+		private final int[] theme6Colors = {0xffAABDB5, 0xff70A193, 0xff84C2C1, 0xff4E7A6E};
+		private final int[] theme7Colors = {0xffADA0AC, 0xffA38BA3, 0xff896D95, 0xff49374A};
 		private final int[] uhoh = {Color.BLACK};
 		
-		//TEST
 		
 		private final Runnable updateDisplay = new Runnable() {
 			@Override
@@ -108,7 +110,10 @@ public class LiveWallpaperService extends WallpaperService {
 				sh = size.y;
 			}
 			
-			//1080 X 1920
+			if (sw < sh) //portrait/phone
+				sf = sw;
+			else //landscape/tablet
+				sf = sh;
 			
 			circles = new ArrayList<>();
 			for (int i = 0; i < 18; i++) {
@@ -151,14 +156,14 @@ public class LiveWallpaperService extends WallpaperService {
 		public Circle generateCircle(int type) {
 			
 			/** FOR SCREEN SIZE SCALING **/
-			int radVar = (int)(0.1*sw);
-			int radBase = (int)(0.055*sw);
-			int velVar = (int)(0.0045*sw);
-			int velBase = (int)(0.003*sw);
+			float radVar = (float)0.09*sf;
+			float radBase = (float)0.065*sf;
+			float velVar = ((float)(0.005*sf) != 0) ? (float)(0.005*sf) : 1; //0.0045
+			float velBase = ((float)(0.0028*sf) != 0) ? (float)(0.0028*sf) : (float)0.5; //0.003
 			
-			int x = rand.nextInt(sw);
-			int y = rand.nextInt(sh);
-			int r = rand.nextInt(radVar)+radBase;
+			float x = rand.nextInt(sw);
+			float y = rand.nextInt(sh);
+			float r = rand.nextFloat()*radVar+radBase;
 			int color; 
 			
 			/**THEME 1: DEFAULT**/
@@ -205,18 +210,58 @@ public class LiveWallpaperService extends WallpaperService {
 				}
 			}
 			
+			/**THEME 5: MATERIAL **/
+			else if (theme.equals("5")) {
+				if (x < sw/3) {
+					color = theme5Colors[0];
+				} else if (x < 2*sw/3) {
+					color = theme5Colors[1];
+				} else {
+					color = theme5Colors[2];
+				}
+			}
+			
+			/**THEME 6: MONOCHROMATIC GREEN **/
+			else if (theme.equals("6")) {
+				if (x < sw/3) {
+					color = theme6Colors[0];
+				} else if (x < 2*sw/3) {
+					color = theme6Colors[1];
+				} else {
+					color = theme6Colors[2];
+				}
+			} 
+			
+			/**THEME 7: MONOCHROMATIC PURPLE **/
+			else if (theme.equals("7")) {
+				if (x < sw/3) {
+					color = theme7Colors[0];
+				} else if (x < 2*sw/3) {
+					color = theme7Colors[1];
+				} else {
+					color = theme7Colors[2];
+				}
+			}
+			
 			/**SHOULD NEVER HAPPEN*/
 			else {
 				color = uhoh[0];
 			}
 			
-			int velocity = rand.nextInt(velVar)+velBase;
+			float velocity = rand.nextFloat()*velVar+velBase;
 			boolean background = rand.nextInt(2)==0 ? true : false;
 			int alpha;
-			if (background) 
-				alpha = rand.nextInt(100)+70;
-			else 
-				alpha = rand.nextInt(80)+100;
+			if (Integer.parseInt(theme) != 5) {
+				if (background) 
+					alpha = rand.nextInt(100)+70;
+				else 
+					alpha = rand.nextInt(80)+100;
+			} else {
+				if (background) 
+					alpha = rand.nextInt(90)+110;
+				else 
+					alpha = rand.nextInt(60)+170;
+			} 
 			
 			
 			if (type == RANDOM) {
@@ -249,20 +294,23 @@ public class LiveWallpaperService extends WallpaperService {
 					} else if (theme.equals("3")) {
 						backgroundColor1 = theme3Colors[3];
 						backgroundColor2 = theme3Colors[4];
-						paint.setShader(new LinearGradient(0, sh, 3*sw/4, sh/2, backgroundColor1, backgroundColor2, Shader.TileMode.CLAMP));
+						paint.setShader(new LinearGradient(0, sh, sw, sh/2, backgroundColor1, backgroundColor2, Shader.TileMode.CLAMP));
 					} else if (theme.equals("4")) {
 						backgroundColor1 = theme4Colors[3];
 						backgroundColor2 = theme4Colors[4];
 						paint.setShader(new RadialGradient(sw/2, sh/2, sh/2, backgroundColor1, backgroundColor2, Shader.TileMode.CLAMP));
+					} else if (theme.equals("5")) {
+						backgroundColor1 = theme5Colors[3];
+						paint.setColor(backgroundColor1);
+					} else if (theme.equals("6")) {
+						backgroundColor1 = theme6Colors[3];
+						paint.setColor(backgroundColor1);
+					} else if (theme.equals("7")) {
+						backgroundColor1 = theme7Colors[3];
+						paint.setColor(backgroundColor1);
 					}
 					
-					else { //SHOULD NEVER HAPPEN
-						backgroundColor1 = Color.WHITE;
-						backgroundColor2 = Color.WHITE;
-					}
 					
-						
-					//paint.setShader(new RadialGradient(sw/2, sh/2, sw/2, backgroundColor1, backgroundColor2, Shader.TileMode.CLAMP));
 					c.drawRect(0, 0, sw, sh, paint);
 					
 					
@@ -275,18 +323,27 @@ public class LiveWallpaperService extends WallpaperService {
 						
 						//is foreground bubble
 						if (!circle.isBackground()) {
-							c.drawCircle(circle.getX(), circle.getY(), circle.getR()+(int)(0.0037*sw), p);
+							c.drawCircle(circle.getX(), circle.getY(), circle.getR()+(int)(0.0037*sf), p);
 							
 							//outer edge
 							p.setStyle(Paint.Style.STROKE);
-							p.setColor(0xccffffff);
-							p.setStrokeWidth((int)(0.0074*sw));
+							if (theme.equals("5"))
+								p.setColor(circle.getColor());
+							else
+								p.setColor(0xccffffff);
+							p.setStrokeWidth((int)(0.0074*sf));
+							if (Integer.parseInt(theme) >= 6)
+								p.setAlpha(50);
 							c.drawCircle(circle.getX(), circle.getY(), circle.getR(), p);
 				
 						} 
 						//is background bubble
 						else {
-							p.setMaskFilter(new BlurMaskFilter(rand.nextInt((int)(0.0037*sw))+(int)(0.0083*sw), BlurMaskFilter.Blur.NORMAL)); 
+							if ((int)(0.0037*sf) != 0)
+								p.setMaskFilter(new BlurMaskFilter(rand.nextInt((int)(0.0037*sf))+(int)(0.0083*sf), BlurMaskFilter.Blur.NORMAL));
+							else
+								if ((int)(0.0083*sf) != 0)
+									p.setMaskFilter(new BlurMaskFilter((int)(0.0083*sf), BlurMaskFilter.Blur.NORMAL));
 							c.drawCircle(circle.getX(), circle.getY(), circle.getR(), p);
 						}
 						
@@ -336,7 +393,7 @@ public class LiveWallpaperService extends WallpaperService {
 			
 			handler.removeCallbacks(updateDisplay);
 			if (visible) {
-				handler.postDelayed(updateDisplay, 10);
+				handler.postDelayed(updateDisplay, 15);
 			}
 		}
 		
@@ -345,19 +402,20 @@ public class LiveWallpaperService extends WallpaperService {
 			//fade away: set alpha of color equal to popCount field in circle
 			int newColor = Color.argb(circle.getPopCount(), Color.red(circle.getColor()), Color.green(circle.getColor()), Color.blue(circle.getColor()));
 			circle.setColor(newColor);
-			p.setMaskFilter(new BlurMaskFilter(2, BlurMaskFilter.Blur.NORMAL));
+			if (sf > 800)
+				p.setMaskFilter(new BlurMaskFilter(2, BlurMaskFilter.Blur.NORMAL));
 			p.setColor(circle.getColor());
 			if (!circle.hasSparks()) { //just popped, generate sparks
-				ArrayList<int[]> newSparks = generateSparks(circle);
+				ArrayList<float[]> newSparks = generateSparks(circle);
 				circle.setHasSparks(true);
 				circle.sparks = newSparks;
 			} 
 			for (int i = 0; i < circle.sparks.size(); i++) {
-				int cx = circle.sparks.get(i)[0];
-				int cy = circle.sparks.get(i)[1];
-				int cr = circle.sparks.get(i)[2];
+				float cx = circle.sparks.get(i)[0];
+				float cy = circle.sparks.get(i)[1];
+				float cr = circle.sparks.get(i)[2];
 				c.drawCircle(cx, cy, cr, p);
-				int cvy = circle.sparks.get(i)[3];
+				float cvy = circle.sparks.get(i)[3];
 				//increase fall speed gradually
 				if (circle.getPopCount() >= 200)
 					circle.sparks.get(i)[1] += cvy*(255/circle.getPopCount());
@@ -366,7 +424,7 @@ public class LiveWallpaperService extends WallpaperService {
 			}
 			
 			//decrease popCount (i.e. decrease transparency of color of sparks)
-			circle.setPopCount(circle.getPopCount()-8);
+			circle.setPopCount(circle.getPopCount()-10);
 			
 			//stop drawing sparks
 			if (circle.getPopCount() <= 15) {
@@ -375,20 +433,20 @@ public class LiveWallpaperService extends WallpaperService {
 		}
 		
 		
-		public ArrayList<int[]> generateSparks(Circle circle) {
+		public ArrayList<float[]> generateSparks(Circle circle) {
 			
 			/**FOR SCREEN SIZE SCALING**/
-			int scaledRad = (int)(0.004*sw);
-			int scaledVelVar = (int)(0.0055*sw);
-			int scaledVelBase = (int)(0.0028*sw);
+			int scaledRad = ((int)(0.004*sf) != 0) ? (int)(0.004*sf) : 1;
+			int scaledVelVar = ((int)(0.0055*sf) != 0) ? (int)(0.0055*sf) : 1;
+			int scaledVelBase = ((int)(0.003*sf) != 0) ? (int)(0.003*sf) : 1;
 			
-			ArrayList<int[]> sparks = new ArrayList<int[]>();
+			ArrayList<float[]> sparks = new ArrayList<>();
 			for (int i = 0; i < rand.nextInt(3)+circle.getR()/10; i++) {
-				int cx = circle.getX()-circle.getR()+rand.nextInt(2*circle.getR()); //anywhere horizontally within circle range
-				int cy = circle.getY()-circle.getR()+rand.nextInt(2*circle.getR()); //anywhere vertically within circle range
-				int cr = rand.nextInt(scaledRad)+scaledRad;
-				int cvy = rand.nextInt(scaledVelVar)+scaledVelBase;
-				int[] spark = {cx, cy, cr, cvy};
+				float cx = circle.getX()-circle.getR()+rand.nextInt((int)(2*circle.getR())); //anywhere horizontally within circle range
+				float cy = circle.getY()-circle.getR()+rand.nextInt((int)(2*circle.getR())); //anywhere vertically within circle range
+				float cr = rand.nextInt(scaledRad)+scaledRad;
+				float cvy = rand.nextInt(scaledVelVar)+scaledVelBase;
+				float[] spark = {cx, cy, cr, cvy};
 				sparks.add(spark);
 			}
 			return sparks;
@@ -403,7 +461,7 @@ public class LiveWallpaperService extends WallpaperService {
 				for (int i = 0; i < circles.size(); i++) {
 					Circle circle = circles.get(i);
 					if (!circle.isBackground()) {
-						if (distance((int)x, (int)y, circle.getX(), circle.getY()) < circle.getR()) {
+						if (distance((int)x, (int)y, (int)circle.getX(), (int)circle.getY()) < (int)circle.getR()) {
 							circle.setToBePopped(true);
 							break;
 						}
@@ -538,6 +596,12 @@ public class LiveWallpaperService extends WallpaperService {
 				return theme3Colors;
 			case "4":
 				return theme4Colors;
+			case "5":
+				return theme5Colors;
+			case "6":
+				return theme6Colors;
+			case "7":
+				return theme7Colors;
 			default:
 				return new int[3];
 			}

@@ -2,8 +2,17 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="${relativePackage}.${activityClass}" 
-    android:background="@drawable/app_background" >
+    tools:context="${relativePackage}.${activityClass}"  >
+    
+    <ImageView
+        android:id="@+id/app_background"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:scaleType="centerCrop"
+        android:src="@drawable/background_theme_1" />
  
     <RelativeLayout 
         android:orientation="vertical"
@@ -18,21 +27,21 @@
         
 	    <Button
 	        android:id="@+id/setWallpaper"
-	        android:layout_width="200dp"
+	        android:layout_width="160dp"
 	        android:layout_height="wrap_content"
 	        android:text="Set wallpaper"
-	        android:textSize="20sp"
+	        android:textSize="15sp"
 	        android:layout_centerHorizontal="true"
-	        android:layout_marginBottom="20dp"
+	        android:layout_marginBottom="12dp"
 	        android:background="@drawable/custom_button"
 	        android:onClick="setWallpaper" />
 	    
 	    <Button
 	        android:id="@+id/settings"
-	        android:layout_width="200dp"
+	        android:layout_width="160dp"
 	        android:layout_height="wrap_content"
 	        android:text="Settings"
-	        android:textSize="20sp"
+	        android:textSize="15sp"
 	        android:layout_centerHorizontal = "true"
 	        android:layout_below="@id/setWallpaper"
 	        android:background="@drawable/custom_button"
