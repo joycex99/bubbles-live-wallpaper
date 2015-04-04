@@ -22,9 +22,11 @@ public class MainActivity extends Activity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
+		
+		PreferenceManager.setDefaultValues(this, R.xml.preferences, false);
 		prefs = PreferenceManager.getDefaultSharedPreferences(this);
 		
-		theme = prefs.getString("themes", "default");
+		theme = prefs.getString("themes", "1");
 		background = (ImageView) findViewById(R.id.app_background);
 		
 		switch(Integer.parseInt(theme)) {
@@ -44,7 +46,7 @@ public class MainActivity extends Activity {
 			background.setImageResource(R.drawable.background_theme_5);
 			break;
 		case 6:
-			background.setImageResource(R.drawable.background_theme_6);
+			background.setImageResource(R.drawable.background_theme_6_2);
 			break;
 		case 7:
 			background.setImageResource(R.drawable.background_theme_7);

@@ -6,6 +6,7 @@ public class Circle {
 	private float x, y, r, velocity;
 	private int color, alpha;
 	private boolean background;
+	private boolean beenReplaced;
 	private boolean toBePopped;
 	public ArrayList<float[]> sparks; //[cx, cy, r, vy]
 	private boolean hasSparks;
@@ -23,6 +24,7 @@ public class Circle {
 		this.setHasSparks(false);
 		this.sparks = new ArrayList<>();
 		this.popCount = 255;
+		this.setBeenReplaced(false);
 	}
 
 	public float getX() {
@@ -111,6 +113,14 @@ public class Circle {
 
 	public void setPopCount(int popCount) {
 		this.popCount = popCount;
+	}
+
+	public boolean hasBeenReplaced() {
+		return beenReplaced;
+	}
+
+	public void setBeenReplaced(boolean beenReplaced) {
+		this.beenReplaced = beenReplaced;
 	}
 
 }

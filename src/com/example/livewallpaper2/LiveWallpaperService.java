@@ -1,6 +1,7 @@
 package com.example.livewallpaper2;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Random;
 
 import android.content.Context;
@@ -23,6 +24,7 @@ import android.os.Handler;
 import android.os.Vibrator;
 import android.preference.PreferenceManager;
 import android.service.wallpaper.WallpaperService;
+import android.util.Log;
 import android.view.Display;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
@@ -59,17 +61,18 @@ public class LiveWallpaperService extends WallpaperService {
 		//PREFERENCES
 		SharedPreferences prefs;
 		private boolean touchEnabled;
+		private boolean borderIncluded;
 		private String theme = "";
 		private String prevTheme = "";
 		
-		//THEME COLOR SETS
-		private final int[] theme1Colors = {0xff7DF0AC, 0xff7DDAF0, 0xffC993F5, 0xff010B91, Color.BLACK}; //left, center, right, backgroundColor1, backgroundColor2
-		private final int[] theme2Colors = {0xffD6D6D6, 0xffF0E48D, 0xffFFDF12, 0xff2A0266, Color.BLACK};
-		private final int[] theme3Colors = {0xffDBDBDB, 0xffDE2A2A, 0xff7A002B, 0xff30000F, Color.BLACK};
-		private final int[] theme4Colors = {0xff87EDAD, 0xff72F7E6, 0xff82B4FA, 0xff97A4C9, 0xff3F4159};
-		private final int[] theme5Colors = {0xffEC3F8C, 0xff39B1C6, 0xff1FD26A, 0xff32313B};
-		private final int[] theme6Colors = {0xffAABDB5, 0xff70A193, 0xff84C2C1, 0xff4E7A6E};
-		private final int[] theme7Colors = {0xffADA0AC, 0xffA38BA3, 0xff896D95, 0xff49374A};
+		//THEME COLOR SETS 	(left, center, right, backgroundColor1, backgroundColor2)														  
+		private int[] theme1Colors = {0xff7DF0AC, 0xff7DDAF0, 0xffC993F5, 0xff010B91, Color.BLACK}; 
+		private int[] theme2Colors = {0xffD6D6D6, 0xffF0E48D, 0xffFFDF12, 0xff2A0266, Color.BLACK}; //2E03A3
+		private int[] theme3Colors = {0xffDBDBDB, 0xffDE2A2A, 0xff7A002B, 0xff4A0018, Color.BLACK};
+		private int[] theme4Colors = {0xff87EDAD, 0xff72F7E6, 0xff82B4FA, 0xffADBDED, 0xff272B5C}; //0xffADBDED, 0xff272B5C (day) 0xff97A4C9, 0xff2D304D (night)
+		private int[] theme5Colors = {0xffEC3F8C, 0xff39B1C6, 0xff1FD26A, 0xff32313B};
+		private int[] theme6Colors = {0xffC1D9CF, 0xff6BC9AF, 0xff6EBDC2, 0xff226B5F}; //28665C 103B34
+		private int[] theme7Colors = {0xffD4C3D2, 0xffB38FB3, 0xff856694, 0xff4E3C4F};
 		private final int[] uhoh = {Color.BLACK};
 		
 		
@@ -80,11 +83,20 @@ public class LiveWallpaperService extends WallpaperService {
 			}
 		};
 		
+		private final Runnable updateTime = new Runnable() {
+			@Override
+			public void run() {
+				//evalTime();
+			}
+		};
+		
 		public WallpaperEngine() { }
 		
 		@Override
 		public void onCreate(SurfaceHolder surfaceHolder) {
 			super.onCreate(surfaceHolder);
+			
+			PreferenceManager.setDefaultValues(LiveWallpaperService.this, R.xml.preferences, false);
 			
 			sensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
 			accelerometer = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
@@ -94,6 +106,7 @@ public class LiveWallpaperService extends WallpaperService {
 			prefs = PreferenceManager.getDefaultSharedPreferences(LiveWallpaperService.this);
 			prefs.registerOnSharedPreferenceChangeListener(this);
 			touchEnabled = prefs.getBoolean("touch", true);
+			borderIncluded = prefs.getBoolean("border", true);
 			theme = prefs.getString("themes", "default string");
 		    
 			v = (Vibrator) LiveWallpaperService.this.getSystemService(Context.VIBRATOR_SERVICE);
@@ -115,14 +128,16 @@ public class LiveWallpaperService extends WallpaperService {
 			else //landscape/tablet
 				sf = sh;
 			
+			evalTime();
+			
 			circles = new ArrayList<>();
-			for (int i = 0; i < 18; i++) {
+			for (int i = 0; i < 14; i++) {
 				circles.add(generateCircle(RANDOM));
 			}
 			
 			while (!evenlyDistributed(circles)) {
 				circles = new ArrayList<>();
-				for (int i = 0; i < 18; i++) {
+				for (int i = 0; i < 14; i++) {
 					circles.add(generateCircle(RANDOM));
 				}
 			}
@@ -146,9 +161,9 @@ public class LiveWallpaperService extends WallpaperService {
 				else if (circ.getX() > 2*sw/3)
 					right++;
 			}
-			if (backgroundCount <= 6 || backgroundCount >= 12) 
+			if (backgroundCount <= 5 || backgroundCount >= 10) 
 				return false;
-			if (left <= 4 || left >= 8 || center <= 4 || center >= 8 || right <= 4 || right >= 8)
+			if (left <= 3 || left >= 7 || center <= 3 || center >= 7 || right <= 3 || right >= 7)
 				return false;
 			return true;
 		}
@@ -156,7 +171,7 @@ public class LiveWallpaperService extends WallpaperService {
 		public Circle generateCircle(int type) {
 			
 			/** FOR SCREEN SIZE SCALING **/
-			float radVar = (float)0.09*sf;
+			float radVar = (float)0.085*sf;
 			float radBase = (float)0.065*sf;
 			float velVar = ((float)(0.005*sf) != 0) ? (float)(0.005*sf) : 1; //0.0045
 			float velBase = ((float)(0.0028*sf) != 0) ? (float)(0.0028*sf) : (float)0.5; //0.003
@@ -253,7 +268,7 @@ public class LiveWallpaperService extends WallpaperService {
 			int alpha;
 			if (Integer.parseInt(theme) != 5) {
 				if (background) 
-					alpha = rand.nextInt(100)+70;
+					alpha = rand.nextInt(100)+80;
 				else 
 					alpha = rand.nextInt(80)+100;
 			} else {
@@ -281,6 +296,9 @@ public class LiveWallpaperService extends WallpaperService {
 				c = holder.lockCanvas();
 				if (c != null) {
 					c.drawColor(Color.BLACK);
+					
+					evalTime();
+					
 					Paint paint = new Paint();
 					int backgroundColor1, backgroundColor2;
 					if (theme.equals("1")) {
@@ -313,7 +331,6 @@ public class LiveWallpaperService extends WallpaperService {
 					
 					c.drawRect(0, 0, sw, sh, paint);
 					
-					
 					for (int i = 0; i < circles.size(); i++) {
 						Circle circle = circles.get(i);
 						
@@ -321,51 +338,68 @@ public class LiveWallpaperService extends WallpaperService {
 						p.setColor(circle.getColor());
 						p.setAlpha(circle.getAlpha());
 						
-						//is foreground bubble
+						/** FOREGROUND BUBBLE **/
 						if (!circle.isBackground()) {
-							c.drawCircle(circle.getX(), circle.getY(), circle.getR()+(int)(0.0037*sf), p);
+							c.drawCircle(circle.getX(), circle.getY(), circle.getR()+(int)(0.003*sf), p);
 							
 							//outer edge
-							p.setStyle(Paint.Style.STROKE);
-							if (theme.equals("5"))
-								p.setColor(circle.getColor());
-							else
-								p.setColor(0xccffffff);
-							p.setStrokeWidth((int)(0.0074*sf));
-							if (Integer.parseInt(theme) >= 6)
-								p.setAlpha(50);
-							c.drawCircle(circle.getX(), circle.getY(), circle.getR(), p);
+							if (borderIncluded) {
+								p.setStyle(Paint.Style.STROKE);
+								if (theme.equals("5"))
+									p.setColor(circle.getColor());
+								else
+									p.setColor(0xccffffff);
+								p.setStrokeWidth((int)(0.007*sf));
+								
+								if (Integer.parseInt(theme) <= 5) 
+									p.setAlpha(130);
+								else if (Integer.parseInt(theme) >= 6)
+									p.setAlpha(50);
+								
+								c.drawCircle(circle.getX(), circle.getY(), circle.getR(), p);
+							}
 				
 						} 
-						//is background bubble
+						
+						/** BACKGROUND BUBBLE **/
 						else {
-							if ((int)(0.0037*sf) != 0)
-								p.setMaskFilter(new BlurMaskFilter(rand.nextInt((int)(0.0037*sf))+(int)(0.0083*sf), BlurMaskFilter.Blur.NORMAL));
+							if ((int)(0.004*sf) != 0)
+								p.setMaskFilter(new BlurMaskFilter(rand.nextInt((int)(0.004*sf))+(int)(0.0085*sf), BlurMaskFilter.Blur.NORMAL));
 							else
-								if ((int)(0.0083*sf) != 0)
-									p.setMaskFilter(new BlurMaskFilter((int)(0.0083*sf), BlurMaskFilter.Blur.NORMAL));
+								if ((int)(0.0085*sf) != 0)
+									p.setMaskFilter(new BlurMaskFilter((int)(0.0085*sf), BlurMaskFilter.Blur.NORMAL));
 							c.drawCircle(circle.getX(), circle.getY(), circle.getR(), p);
 						}
 						
 						circle.setY(circle.getY()-circle.getVelocity());
 						
-						//at top: remove; generate new circle(s)
-						if (circle.getY() + circle.getR() < 0) {
-							int seed = rand.nextInt(5);
-							if (seed == 0) {
-								//don't generate new
-							} else if (seed == 1){
-								// generate 2
-								circles.add(generateCircle(BOTTOM));
-								circles.add(generateCircle(BELOW));
-							} else {
-								circles.add(generateCircle(BOTTOM));
+						//near top: generate new circle(s)
+						if (circle.getY()-circle.getR() < 0) {
+							if (!circle.hasBeenReplaced()) {
+								circle.setBeenReplaced(true);
+								
+								//generate new
+								int seed = rand.nextInt(5);
+								if (seed == 0) {
+									//don't generate new
+								} else if (seed == 1){
+									// generate 2
+									circles.add(generateCircle(BOTTOM));
+									circles.add(generateCircle(BELOW));
+								} else {
+									circles.add(generateCircle(BOTTOM));
+								}
 							}
+						}
+						
+						//at top: remove
+						if (circle.getY() + circle.getR() < 0) {
 							if (i != 0)
 								i--;
 							circles.remove(circle);
 						}
 						
+						//on touch event
 						if (circle.isToBePopped()) {
 							circles.remove(circle);
 							popped.add(circle);
@@ -438,10 +472,10 @@ public class LiveWallpaperService extends WallpaperService {
 			/**FOR SCREEN SIZE SCALING**/
 			int scaledRad = ((int)(0.004*sf) != 0) ? (int)(0.004*sf) : 1;
 			int scaledVelVar = ((int)(0.0055*sf) != 0) ? (int)(0.0055*sf) : 1;
-			int scaledVelBase = ((int)(0.003*sf) != 0) ? (int)(0.003*sf) : 1;
+			int scaledVelBase = ((int)(0.0035*sf) != 0) ? (int)(0.0035*sf) : 1;
 			
 			ArrayList<float[]> sparks = new ArrayList<>();
-			for (int i = 0; i < rand.nextInt(3)+circle.getR()/10; i++) {
+			for (int i = 0; i < circle.getR()/11; i++) {
 				float cx = circle.getX()-circle.getR()+rand.nextInt((int)(2*circle.getR())); //anywhere horizontally within circle range
 				float cy = circle.getY()-circle.getR()+rand.nextInt((int)(2*circle.getR())); //anywhere vertically within circle range
 				float cr = rand.nextInt(scaledRad)+scaledRad;
@@ -564,6 +598,9 @@ public class LiveWallpaperService extends WallpaperService {
 					sensorManager = null;
 				}
 			}
+			if (key.equals("border")) {
+				borderIncluded = prefs.getBoolean("border", true);
+			}
 			if (key.equals("themes")) {
 				prevTheme = theme; //set previous theme to current theme
 				theme = prefs.getString("themes", "default"); //set current theme to changed theme
@@ -606,7 +643,114 @@ public class LiveWallpaperService extends WallpaperService {
 				return new int[3];
 			}
 		}
-
+		
+		public void evalTime() {
+			Calendar cal = Calendar.getInstance();
+			int hour = cal.get(Calendar.HOUR_OF_DAY);
+			
+			switch(Integer.parseInt(theme)) {
+			
+			case 1:
+				if ((hour >= 8 && hour < 20)) //8am-8pm: daytime
+					theme1Colors[3] = 0xff010B91;
+				else 
+					theme1Colors[3] = 0xff130259;
+				break;
+				
+			case 2:
+				if ((hour >= 8 && hour < 20))  
+					theme2Colors[3] = 0xff2E03A3;
+				else 
+					theme2Colors[3] = 0xff2A0266; 
+				break;
+				
+			case 3:
+				if ((hour >= 8 && hour < 20))  
+					theme3Colors[3] = 0xff4A0018;
+				else 
+					theme3Colors[3] = 0xff30000F; 
+				break;
+				
+			case 4:
+				if ((hour >= 8 && hour < 20)) {
+					theme4Colors[3] = 0xffB6C5F2; //0xffADBDED, 0xff272B5C
+					theme4Colors[4] = 0xff363B75;
+				}
+				else {
+					theme4Colors[3] = 0xff97A4C9; //0xff97A4C9, 0xff2D304D
+					theme4Colors[4] = 0xff2D304D;
+				}
+				break;
+			}
+		}
+//		
+//		public void evalTime() {
+//			int[] colors = colorsOfTheme(theme);
+//			int defaultBackground = midnightBackground(Integer.parseInt(theme));
+//			int newBackground;
+//			
+//			Calendar cal = Calendar.getInstance();
+//			int hour = cal.get(Calendar.HOUR_OF_DAY);
+//			
+//			if (hour == 0 || hour == 24) { //midnight
+//				newBackground = defaultBackground;
+//			} else {
+//				int changeFactor;
+//				if (hour < 12) { //am
+//					changeFactor = hour;
+//				} else { //pm
+//					changeFactor = 24-hour;
+//				}
+//				
+//				//build new color: proportionally increase each component of color based on original, multiply by lightness of hour of day (changeFactor)
+//				int r = (int)(Color.red(defaultBackground) + ((double)Color.red(defaultBackground)/50)*changeFactor);
+//				int g = (int)(Color.green(defaultBackground) + ((double)Color.green(defaultBackground)/50)*changeFactor);
+//				int b = (int)(Color.blue(defaultBackground) + ((double)Color.blue(defaultBackground)/50)*changeFactor); 
+//				
+//				if (r > 255)
+//					r = 255;
+//				if (g > 255)
+//					g = 255;
+//				if (b > 255)
+//					b = 255;
+//				
+//				newBackground = Color.rgb(r, g, b);
+//			}
+//			colors[3] = newBackground;
+//		}
+//		
+//		public int midnightBackground(int theme) {
+//			int backgroundColor;
+//			switch(theme) {
+//			case 1:
+//				backgroundColor = 0xff010B91;
+//				break;
+//			case 2:
+//				backgroundColor = 0xff2A0266;
+//				break;
+//			case 3:
+//				backgroundColor = 0xff30000F;
+//				break;
+//			case 4:
+//				backgroundColor = 0xff97A4C9;
+//				break;
+//			case 5:
+//				backgroundColor = 0xff32313B;
+//				break;
+//			case 6:
+//				backgroundColor = 0xff28665C;
+//				break;
+//			case 7:
+//				backgroundColor = 0xff49374A;
+//				break;
+//			default:
+//				backgroundColor = Color.BLACK;
+//				break;
+//			}
+//			return backgroundColor;
+//		}
+//		
 	}
+	
 	
 }

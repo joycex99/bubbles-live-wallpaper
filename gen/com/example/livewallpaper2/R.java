@@ -1633,11 +1633,13 @@ containing a value of this type.
         public static final int background_theme_4=0x7f020036;
         public static final int background_theme_5=0x7f020037;
         public static final int background_theme_6=0x7f020038;
-        public static final int background_theme_7=0x7f020039;
-        public static final int custom_button=0x7f02003a;
-        public static final int graybox=0x7f02003b;
-        public static final int ic_launcher=0x7f02003c;
-        public static final int thumbnail=0x7f02003d;
+        public static final int background_theme_6_2=0x7f020039;
+        public static final int background_theme_7=0x7f02003a;
+        public static final int custom_button=0x7f02003b;
+        public static final int graybox=0x7f02003c;
+        public static final int ic_launcher=0x7f02003d;
+        public static final int thumbnail=0x7f02003e;
+        public static final int white_sparkle=0x7f02003f;
     }
     public static final class id {
         public static final int action_bar=0x7f0a0031;
@@ -1818,6 +1820,8 @@ containing a value of this type.
         public static final int abc_toolbar_collapse_description=0x7f0b0004;
         public static final int app_name=0x7f0b0010;
         public static final int hello_world=0x7f0b0011;
+        public static final int pref_border_summary=0x7f0b0019;
+        public static final int pref_include_border=0x7f0b0018;
         public static final int pref_shake_enabled=0x7f0b0016;
         public static final int pref_shake_summary=0x7f0b0017;
         public static final int pref_themes=0x7f0b0014;

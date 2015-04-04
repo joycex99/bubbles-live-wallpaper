@@ -339,11 +339,13 @@ int drawable background_theme_3 0x7f020035
 int drawable background_theme_4 0x7f020036
 int drawable background_theme_5 0x7f020037
 int drawable background_theme_6 0x7f020038
-int drawable background_theme_7 0x7f020039
-int drawable custom_button 0x7f02003a
-int drawable graybox 0x7f02003b
-int drawable ic_launcher 0x7f02003c
-int drawable thumbnail 0x7f02003d
+int drawable background_theme_6_2 0x7f020039
+int drawable background_theme_7 0x7f02003a
+int drawable custom_button 0x7f02003b
+int drawable graybox 0x7f02003c
+int drawable ic_launcher 0x7f02003d
+int drawable thumbnail 0x7f02003e
+int drawable white_sparkle 0x7f02003f
 int id action_bar 0x7f0a0031
 int id action_bar_activity_content 0x7f0a0003
 int id action_bar_container 0x7f0a0030
@@ -454,6 +456,8 @@ int string abc_shareactionprovider_share_with_application 0x7f0b000e
 int string abc_toolbar_collapse_description 0x7f0b0004
 int string app_name 0x7f0b0010
 int string hello_world 0x7f0b0011
+int string pref_border_summary 0x7f0b0019
+int string pref_include_border 0x7f0b0018
 int string pref_shake_enabled 0x7f0b0016
 int string pref_shake_summary 0x7f0b0017
 int string pref_themes 0x7f0b0014
