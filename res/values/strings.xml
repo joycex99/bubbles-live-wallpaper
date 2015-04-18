@@ -11,6 +11,8 @@
     <string name="pref_shake_summary">Bubbles will pop and regenerate if phone shaken</string>
     <string name="pref_include_border">Include Border</string>
     <string name="pref_border_summary">Display a border around foreground bubbles</string>
+    <string name="pref_time_shift">Enable Time Sensor</string>
+    <string name="pref_time_summary">Allow themes to change colors and hues based on time of day</string>
     
 
 </resources>

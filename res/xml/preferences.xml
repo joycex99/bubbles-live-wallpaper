@@ -15,6 +15,11 @@
         android:title="@string/pref_include_border"
         android:summary="@string/pref_border_summary"
         android:defaultValue="true" />
+    <CheckBoxPreference
+        android:key="timeshift"
+        android:title="@string/pref_time_shift"
+        android:summary="@string/pref_time_summary"
+        android:defaultValue="true" />
     <ListPreference
         android:key="themes"
         android:title="@string/pref_themes"

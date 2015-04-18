@@ -6,7 +6,7 @@
 
     <uses-sdk
         android:minSdkVersion="13"
-        android:targetSdkVersion="21" />
+        android:targetSdkVersion="22" />
 
     <uses-feature
         android:name="android.software.live_wallpaper"
@@ -17,7 +17,7 @@
   	
     <application
         android:allowBackup="true"
-        android:icon="@drawable/ic_launcher"
+        android:icon="@drawable/launcher_rounded"
         android:label="@string/app_name"
         android:theme="@style/AppTheme" 
         android:hardwareAccelerated="false" >
@@ -35,7 +35,7 @@
             </meta-data>
         </service>
         <activity
-            android:name=".MainActivity"
+            android:name="com.example.livewallpaper2.MainActivity"
             android:label="@string/app_name" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -44,7 +44,7 @@
             </intent-filter>
         </activity>
         <activity 
-            android:name=".SettingsActivity"
+            android:name="com.example.livewallpaper2.SettingsActivity"
             android:label="Settings Activity" >
         </activity>
     </application>

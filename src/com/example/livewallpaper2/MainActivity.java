@@ -1,5 +1,6 @@
 package com.example.livewallpaper2;
 
+import com.example.livewallpaper2.R;
 import android.app.Activity;
 import android.app.WallpaperManager;
 import android.content.ComponentName;
@@ -46,10 +47,13 @@ public class MainActivity extends Activity {
 			background.setImageResource(R.drawable.background_theme_5);
 			break;
 		case 6:
-			background.setImageResource(R.drawable.background_theme_6_2);
+			background.setImageResource(R.drawable.background_theme_6);
 			break;
 		case 7:
 			background.setImageResource(R.drawable.background_theme_7);
+			break;
+		case 8:
+			background.setImageResource(R.drawable.background_theme_8);
 			break;
 		default:
 			break;
