@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Random;
 
-import com.example.livewallpaper2.R;
+import com.xluminati.livewallpaper2.R;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
@@ -170,8 +170,8 @@ public class LiveWallpaperService extends WallpaperService {
 			/** FOR SCREEN SIZE SCALING **/
 			float radVar = (float)0.085*sf;
 			float radBase = (float)0.065*sf;
-			float velVar = ((float)(0.005*sf) != 0) ? (float)(0.005*sf) : 1; //0.0045
-			float velBase = ((float)(0.0028*sf) != 0) ? (float)(0.0028*sf) : (float)0.5; //0.003
+			float velVar = ((float)(0.005*sf) != 0) ? (float)(0.005*sf) : (float)0.1; //0.0045
+			float velBase = ((float)(0.0028*sf) != 0) ? (float)(0.0028*sf) : (float)0.05; //0.003
 			
 			float x = rand.nextInt(sw);
 			float y = rand.nextInt(sh);
@@ -393,16 +393,6 @@ public class LiveWallpaperService extends WallpaperService {
 								
 								//generate new
 								circles.add(generateCircle(BOTTOM));
-//								int seed = rand.nextInt(8);
-//								if (seed == 0) {
-//									//don't generate new
-//								} else if (seed == 1){
-//									// generate 2
-//									circles.add(generateCircle(BOTTOM));
-//									circles.add(generateCircle(BELOW));
-//								} else {
-//									circles.add(generateCircle(BOTTOM));
-//								}
 							}
 						}
 						

@@ -1,6 +1,6 @@
 package com.example.livewallpaper2;
 
-import com.example.livewallpaper2.R;
+import com.xluminati.livewallpaper2.R;
 import android.app.Activity;
 import android.app.WallpaperManager;
 import android.content.ComponentName;

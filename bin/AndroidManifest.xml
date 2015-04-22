@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.example.livewallpaper2"
+    package="com.xluminati.livewallpaper2"
     android:versionCode="1"
     android:versionName="1.0" >
 
     <uses-sdk
-        android:minSdkVersion="13"
+        android:minSdkVersion="14"
         android:targetSdkVersion="22" />
 
     <uses-feature
@@ -17,14 +17,14 @@
   	
     <application
         android:allowBackup="true"
-        android:icon="@drawable/launcher_rounded"
+        android:icon="@drawable/launcher_alt_2_rounded"
         android:label="@string/app_name"
         android:theme="@style/AppTheme" 
         android:hardwareAccelerated="false" >
         <service
-            android:name="LiveWallpaperService"
+            android:name="com.example.livewallpaper2.LiveWallpaperService"
             android:enabled="true"
-            android:label="Wallpaper Example"
+            android:label="Bubble Phases"
             android:permission="android.permission.BIND_WALLPAPER" >
             <intent-filter>
                 <action android:name="android.service.wallpaper.WallpaperService"></action>
